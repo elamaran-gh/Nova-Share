@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import "./FileUploader.css";
+
 import { useDispatch, useSelector } from "react-redux";
 import { uploadFile } from "../../../redux/slice/file/fileThunk";
 import { toast } from "react-toastify";
