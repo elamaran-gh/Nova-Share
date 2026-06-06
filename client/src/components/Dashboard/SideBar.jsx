@@ -1,16 +1,19 @@
 import React from "react";
-import { MdHome, MdUpload, MdSettings, MdLogout } from "react-icons/md";
+import { MdHome, MdUpload, MdPerson, MdLogout } from "react-icons/md";
+
 const Sidebar = ({ sidebarOpen, setSidebarOpen, setActiveTab, activeTab }) => {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     setSidebarOpen(false);
   };
+
   const tabs = [
     { name: "Home", icon: <MdHome size={20} />, id: "home" },
     { name: "Upload Files", icon: <MdUpload size={20} />, id: "upload" },
-    { name: "Settings", icon: <MdSettings size={20} />, id: "settings" },
+    { name: "Profile", icon: <MdPerson size={20} />, id: "profile" },
     { name: "Logout", icon: <MdLogout size={20} />, id: "logout" },
   ];
+
   return (
     <div
       className={`fixed inset-y-0 left-0 transform ${
@@ -38,4 +41,5 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, setActiveTab, activeTab }) => {
     </div>
   );
 };
+
 export default Sidebar;

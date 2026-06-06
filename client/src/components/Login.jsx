@@ -1,130 +1,75 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { loginUser, registerUser } from '../redux/slice/auth/authThunk';
+import { loginUser } from '../redux/slice/auth/authThunk';
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.auth);
+  const [formData, setFormData] = useState({ email: '', password: '' });
 
-  const [formData,setFormData]=useState({
-    email:'',
-    password:'',
-  })
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleChange=(e)=>{
-   setFormData({
-    ...formData,
-    [e.target.name]:e.target.value,
-   })
-  }
-
-  const handleSubmit=async (e)=>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if(!formData.email || !formData.password){
-      toast.error('Please fill all the fields');
-      return;
-    }
-
-
-
+    if (!formData.email || !formData.password) { toast.error('Please fill all fields'); return; }
     try {
       const result = await dispatch(loginUser(formData));
-      console.log(result);
-      
-      if (result.error) {
-        toast.error(result.payload);
-      } else {
-        toast.success('Login successful');
-        navigate('/dashboard');
-      }
-    } catch (error) {
-      toast.error('Error During Login');
-      console.log(error);     
-    }
-  }
+      if (result.error) { toast.error(result.payload); }
+      else { toast.success('Login successful'); navigate('/dashboard'); }
+    } catch { toast.error('Error during login'); }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
-      <div className="m-0 sm:m-12 bg-white shadow sm:rounded-lg flex justify-center flex-1">
-        <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
-          <div>
-            {/* <img
-              src="https://storage.googleapis.com/devitary-image-host.appspot.com/15846435184459982716-LogoMakr_7POjrN.png"
-              className="w-32 mx-auto"
-              alt="Logo"
-            /> */}
-          </div>
-          <div className="mt-12 flex flex-col items-center">
-            <h1 className="text-2xl xl:text-3xl font-extrabold">
-              Login to NovaShare 
-            </h1>
-            <div className="w-full flex-1 mt-8">
-              <div className="mx-auto max-w-xs">
-               
-                <input
-                  className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                  type="email"
-                  name="email"
-                  onChange={handleChange}
-                  value={formData.email}
-                  placeholder="Email"
-                />
-                <input
-                  className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                  type="password"
-                  name="password"
-                  onChange={handleChange}
-                  value={formData.password}
-                  placeholder="Password"
-                />
-                <button
-                  className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
-                  onClick={handleSubmit}
-                  disabled={loading}
-                >
-                  <svg
-                    className="w-6 h-6 -ml-2"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                    <circle cx="8.5" cy="7" r="4" />
-                    <path d="M20 8v6M23 11h-6" />
-                  </svg>
-                  <span className="ml-3">{loading ? "Logging..." : "Login"}</span>
-                </button>
-                <p className="mt-6 text-xs text-gray-600 text-center">
-                   Don't have an account?{' '}
-                  <a
-                    href="/signup"
-                    className="border-b border-gray-500 border-dotted text-primary hover:text-primary font-semibold"
-                  >
-                    Sign Up
-                  </a>
-                 
-                </p>
-              </div>
-            </div>
-          </div>
+    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden"
+      style={{ background: 'linear-gradient(135deg,#0a0f1e 0%,#0d1b3e 40%,#0a2240 70%,#061428 100%)' }}>
+
+      <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-20 blur-3xl pointer-events-none"
+        style={{ background: '#3b82f6', transform: 'translate(30%,-30%)' }} />
+      <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full opacity-20 blur-3xl pointer-events-none"
+        style={{ background: '#8b5cf6', transform: 'translate(-30%,30%)' }} />
+      <div className="absolute inset-0 pointer-events-none"
+        style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px)', backgroundSize: '60px 60px' }} />
+
+      <div className="relative z-10 w-full max-w-md">
+        <div className="text-center mb-8">
+          <Link to="/" className="inline-flex items-center gap-2 mb-4">
+            <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-br from-blue-500 to-purple-500" />
+            <span className="text-white font-bold text-xl tracking-tight">NovaShare</span>
+          </Link>
+          <h1 className="text-3xl font-bold text-white tracking-tight">Welcome back</h1>
+          <p className="text-slate-400 text-sm mt-2">Sign in to your account</p>
         </div>
 
-        {/* Right Side Image Section */}
-        <div className="flex-1 bg-indigo-100 text-center hidden lg:flex">
-          <div
-            className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
-            style={{
-              backgroundImage:
-                "url('https://storage.googleapis.com/devitary-image-host.appspot.com/15848031292911696601-undraw_designer_life_w96d.svg')",
-            }}
-          ></div>
+        <div className="border border-white/10 rounded-2xl p-8" style={{ background: 'rgba(255,255,255,0.05)' }}>
+          <div className="space-y-4">
+            <div>
+              <label className="text-xs text-slate-400 uppercase tracking-widest mb-1.5 block">Email</label>
+              <input type="email" name="email" value={formData.email} onChange={handleChange}
+                placeholder="you@example.com"
+                className="w-full px-4 py-3 rounded-xl border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 transition"
+                style={{ background: 'rgba(255,255,255,0.05)' }} />
+            </div>
+            <div>
+              <label className="text-xs text-slate-400 uppercase tracking-widest mb-1.5 block">Password</label>
+              <input type="password" name="password" value={formData.password} onChange={handleChange}
+                placeholder="••••••••"
+                className="w-full px-4 py-3 rounded-xl border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 transition"
+                style={{ background: 'rgba(255,255,255,0.05)' }} />
+            </div>
+            <button onClick={handleSubmit} disabled={loading}
+              className="w-full py-3.5 rounded-xl bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm transition mt-2">
+              {loading ? 'Signing in...' : 'Sign in'}
+            </button>
+          </div>
+          <p className="text-center text-sm text-slate-400 mt-6">
+            Don't have an account?{' '}
+            <Link to="/signup" className="text-blue-400 hover:text-blue-300 font-medium transition">Sign up free</Link>
+          </p>
         </div>
+        <p className="text-center text-xs text-slate-600 mt-6">&copy; {new Date().getFullYear()} NovaShare.</p>
       </div>
     </div>
   );

@@ -12,7 +12,8 @@ const colorMap = {
 };
 
 const Header = ({ sidebarOpen, setSidebarOpen }) => {
-  const { user } = useSelector((state) => state.auth);
+  const { user: rawUser } = useSelector((state) => state.auth);
+  const user = rawUser?.user || rawUser;
   const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
   const [mode, setModeState] = useState("light");
   const [theme, setThemeState] = useState("pink");
@@ -124,3 +125,4 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
 };
 
 export default Header;
+

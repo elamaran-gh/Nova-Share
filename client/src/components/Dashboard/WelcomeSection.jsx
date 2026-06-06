@@ -1,6 +1,6 @@
 import React from "react";
 
-const WelcomeSection = ({ user }) => {
+const WelcomeSection = ({ user, setActiveTab }) => {
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour >= 5 && hour < 12) return "Good morning";
@@ -10,7 +10,11 @@ const WelcomeSection = ({ user }) => {
   };
 
   return (
-    <section className="relative overflow-hidden rounded-2xl p-8 mb-6" style={{background:"var(--gradient-bg)"}}>
+    <section
+      className="relative overflow-hidden rounded-2xl p-8 mb-6 cursor-pointer hover:opacity-90 transition"
+      style={{ background: "var(--gradient-bg)" }}
+      onClick={() => setActiveTab("profile")}
+    >
       <div className="relative z-10 flex items-center gap-6 flex-wrap">
         <div className="w-20 h-20 rounded-full border-4 border-white shadow bg-blue-600 flex items-center justify-center text-white text-3xl font-bold">
           {user?.fullname?.charAt(0).toUpperCase() || "U"}
