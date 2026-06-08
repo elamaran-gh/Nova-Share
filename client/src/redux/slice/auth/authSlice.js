@@ -1,7 +1,8 @@
-// src/features/auth/authSlice.js
 import { createSlice } from '@reduxjs/toolkit';
-import { registerUser, loginUser,updateUser,deleteUser, getUser } from './authThunk';
+import { registerUser, loginUser, updateUser, deleteUser, getUser } from './authThunk';
+
 const stored = localStorage.getItem('user');
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
@@ -15,6 +16,7 @@ const authSlice = createSlice({
       state.user = null;
       state.isLoggedIn = false;
       localStorage.removeItem('user');
+      localStorage.removeItem('token');
     },
     loadUserFromStorage: (state) => {
       const stored = localStorage.getItem('user');
@@ -31,11 +33,10 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(registerUser.fulfilled, (state) => {
         state.loading = false;
-        state.user = action.payload;
-        state.isLoggedIn = true;
-        localStorage.setItem('user', JSON.stringify(action.payload));
+        state.user = null;
+        state.isLoggedIn = false;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
@@ -48,64 +49,64 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        state.loading = false;        
+        state.loading = false;
         state.user = action.payload.user;
         state.isLoggedIn = true;
         localStorage.setItem('user', JSON.stringify(action.payload.user));
+        localStorage.setItem('token', action.payload.token);
       })
       .addCase(loginUser.rejected, (state, action) => {
         console.log(action);
-        
         state.loading = false;
         state.error = action.payload || 'Login failed';
       })
-        // updateUser
-      .addCase(updateUser.pending,(state)=>{
-        state.loading=true;
-        state.error=null;
-      })
-      .addCase(updateUser.fulfilled,(state,action)=>{
-        state.loading=false;
-        state.user=action.payload;
-        localStorage.setItem('user',JSON.stringify(action.payload));
-      })
-        .addCase(updateUser.rejected,(state,action)=>{
-            state.loading=false;
-            state.error=action.payload?.error || 'Update failed';
-        })
-        // deleteUser
-        .addCase(deleteUser.pending,(state)=>{
-            state.loading=true;
-            state.error=null;
-        })
-        .addCase(deleteUser.fulfilled,(state,action)=>{
-            state.loading=false;
-            state.user=null;
-            state.isLoggedIn=false;
-            localStorage.removeItem('user');
-        })
-        .addCase(deleteUser.rejected,(state,action)=>{
-            state.loading=false;
-            state.error=action.payload?.error || 'Delete failed';
-        })
-        // getUser
-        .addCase(getUser.pending,(state)=>{
-            state.loading=true;
-            state.error=null;
-        })
-        .addCase(getUser.fulfilled,(state,action)=>{
-            state.loading=false;
-            console.log(action.payload);
-            
-            state.user=action.payload;
-            // localStorage.setItem('user',JSON.stringify(action.payload));
-        })
-        .addCase(getUser.rejected,(state,action)=>{
-            state.loading=false;
-            state.error=action.payload?.error || 'Get user failed';
-        })
-     
 
+      // UPDATE USER
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+        localStorage.setItem('user', JSON.stringify(action.payload));
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.error || 'Update failed';
+      })
+
+      // DELETE USER
+      .addCase(deleteUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteUser.fulfilled, (state) => {
+        state.loading = false;
+        state.user = null;
+        state.isLoggedIn = false;
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.error || 'Delete failed';
+      })
+
+      // GET USER
+      .addCase(getUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.loading = false;
+        console.log(action.payload);
+        state.user = action.payload;
+      })
+      .addCase(getUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.error || 'Get user failed';
+      })
   }
 });
 
