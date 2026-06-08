@@ -21,10 +21,11 @@ const [filterStatus, setFilterStatus] = useState("");
   const itemsPerPage = 10;
 
   useEffect(() => {
-    if (user && user._id) {
-      dispatch(getUserFiles(user._id));
-    }
-  }, [user, dispatch]);
+   if (user) {
+   const userId = user._id || user.id;
+   if (userId) dispatch(getUserFiles(userId));
+  }
+}, [user, dispatch]);
 
   const sortFileName = (filename)=>{
     // Sort the file name to ensure consistent display
@@ -104,7 +105,7 @@ const paginatedFiles = filteredFiles?.slice(
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold mb-4">📁 Your Uploaded Files</h2>
         <p className="text-sm text-gray-500">
-  Showing {filteredFiles.length} file{filteredFiles.length !== 1 && "s"}
+ Showing {filteredFiles?.length || 0} file{(filteredFiles?.length || 0) !== 1 && "s"}
 </p>
 
         
