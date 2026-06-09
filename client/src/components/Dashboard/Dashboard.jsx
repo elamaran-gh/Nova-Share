@@ -8,6 +8,7 @@ import UserProfile from "./UserProfile";
 import UploadPage from "./FileUpload/UploadPage";
 import FileShow from "./FileShow";
 import Logout from "./Logout";
+import AIAssistant from "./AIAssistant";
 import Footer from "../Footer";
 
 const Dashboard = () => {
@@ -49,6 +50,7 @@ const Dashboard = () => {
                 <WelcomeSection user={user} setActiveTab={setActiveTab} />
                 <StatsGrid />
                 <FileShow />
+                <AIAssistant />
               </>
             )}
           </main>
@@ -60,4 +62,5 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
 

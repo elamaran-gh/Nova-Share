@@ -157,3 +157,23 @@ export const getUserFiles = createAsyncThunk("file/getUserFiles", async (userId,
     return rejectWithValue(err.response?.data);
   }
 });
+
+// AI SEARCH
+export const aiSearch = createAsyncThunk("file/aiSearch", async ({ query, files }, { rejectWithValue }) => {
+  try {
+    const res = await axiosInstance.post("/ai/search", { query, files });
+    return res.data.files;
+  } catch (err) {
+    return rejectWithValue(err.response?.data);
+  }
+});
+
+// AI SUMMARIZE
+export const aiSummarize = createAsyncThunk("file/aiSummarize", async (file, { rejectWithValue }) => {
+  try {
+    const res = await axiosInstance.post("/ai/summarize", { file });
+    return res.data.summary;
+  } catch (err) {
+    return rejectWithValue(err.response?.data);
+  }
+});
