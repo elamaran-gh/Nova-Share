@@ -214,7 +214,6 @@ const showUserFiles = async (req, res) => {
   const userId = req.user.userId;
   try {
     const files = await File.find({ createdBy: userId });
-    if (!files.length) return res.status(404).json({ message: 'No files found' });
     return res.status(200).json(files);
   } catch (error) {
     return res.status(500).json({ error: 'Error fetching user files' });
@@ -331,7 +330,6 @@ const getUserFiles = async (req, res) => {
   const { userId } = req.params;
   try {
     const files = await File.find({ createdBy: userId });
-    if (!files.length) return res.status(404).json({ message: 'No files found' });
     return res.status(200).json(files);
   } catch (error) {
     return res.status(500).json({ error: 'Error fetching user files' });
